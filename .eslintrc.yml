@@ -1,0 +1,45 @@
+env:
+  browser: true
+  commonjs: true
+  es6: true
+extends: [ "airbnb-base", "plugin:you-dont-need-momentjs/recommended"]
+globals:
+  Atomics: readonly
+  SharedArrayBuffer: readonly
+parserOptions:
+  ecmaVersion: 2018
+plugins:
+  - node
+  - you-dont-need-momentjs
+  - no-only-tests
+  - dependencies
+  - json
+  - mocha
+  - comments
+  - chai-expect
+  - filenames
+  - no-async-without-await
+rules: {
+  arrow-parens: ["error", "always"],
+  node/exports-style: ["error", "module.exports"],
+  node/file-extension-in-import: ["error", "always"],
+  node/prefer-global/buffer: ["error", "always"],
+  node/prefer-global/console: ["error", "always"],
+  node/prefer-global/process: ["error", "always"],
+  node/prefer-global/url-search-params: ["error", "always"],
+  node/prefer-global/url: ["error", "always"],
+  node/prefer-promises/dns: "error",
+  node/prefer-promises/fs: "error",
+  filenames/match-regex: [2, "^([a-z|-]+)((\\.unit|\\.integration)?(\\.test)?)$", true],
+  filenames/match-exported: 2,
+  no-only-tests/no-only-tests: "error",
+  mocha/no-exclusive-tests: "error",
+  chai-expect/missing-assertion: 2,
+  chai-expect/terminating-properties: 1,
+  no-async-without-await/no-async-without-await: 1,
+  dependencies/case-sensitive: 1,
+  dependencies/no-cycles: 1,
+  dependencies/no-unresolved: 1,
+  dependencies/require-json-ext: 1
+
+}
