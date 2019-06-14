@@ -1,14 +1,4 @@
-const mockData = require('mock-data');
-
-const mockerGenericFunction = (type, options) => mockData[type](options);
-
-const dataTypesMockers = {
-  integer: (options) => mockerGenericFunction('integer', options),
-  string: (options) => mockerGenericFunction('string', options),
-  ipv4: (options) => mockerGenericFunction('ipv4', options),
-  boolean: (options) => mockerGenericFunction('boolean', options),
-  date: (options) => mockerGenericFunction('date', options),
-};
+const dataTypesMockers = require('../data-types-generator');
 
 const mocker = (schema) => {
   const { type, options = {}, properties = {} } = schema;
@@ -16,14 +6,10 @@ const mocker = (schema) => {
     return dataTypesMockers[type](options);
   }
   if (type === 'object') {
-    //   const meow = {};
-    //   Object.keys(properties).forEach((prop) => {
-    //    const temp = {};
-    //    temp[prop] = mocker(schema[prop])
-    //   })
     // eslint-disable-next-line prettier/prettier
     return Object.keys(properties).reduce((prev, curr) => ({ ...prev, [curr]: mocker(properties[curr]) }), {});
   }
+  return new Error('Not support data type');
 };
 
 const mockerGenerateInstance = (generatorTree) => {
