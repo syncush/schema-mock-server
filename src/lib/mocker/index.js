@@ -7,7 +7,9 @@ const mocker = (schema) => {
     return dataTypesMockers[type](options);
   }
   if (type === 'object') {
-    return Object.keys(properties).reduce((prev, curr) => ({ ...prev, [curr]: mocker(properties[curr]) }), {});
+    const generationSchema = Object.keys(properties).reduce((prev, curr) => ({ ...prev, [curr]: mocker(properties[curr]) }), {});
+    return dataTypesMockers.object(generationSchema);
+    // return Object.keys(properties).reduce((prev, curr) => ({ ...prev, [curr]: mocker(properties[curr]) }), {});
   }
   if (['array', 'arr'].includes(type)) {
     const {
