@@ -12,6 +12,8 @@ const stringFromRegexGenerator = (options) => {
   };
 };
 
+const generateRandomIntegerInRange = (min, max) => Math.floor(Math.random(min) * (max - min) + min);
+
 module.exports = {
   integer: (options) => mockerGenericFunction('integer', options),
   string: (options) => {
@@ -23,4 +25,12 @@ module.exports = {
   ipv4: (options) => mockerGenericFunction('ipv4', options),
   boolean: (options) => mockerGenericFunction('boolean', options),
   date: (options) => mockerGenericFunction('date', options),
+  array: (itemScheam, options) => {
+    const { minItems, maxItems } = options;
+    return {
+      generate() {
+        return [...Array(generateRandomIntegerInRange(minItems, maxItems)).keys()].map(() => itemScheam.generate());
+      },
+    };
+  },
 };
