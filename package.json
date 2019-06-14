@@ -2,13 +2,12 @@
   "name": "TestEslint",
   "version": "1.0.0",
   "description": "",
-  "main": "hatul-meow.js",
+  "main": "index.js",
   "type": "commonjs",
   "scripts": {
     "lint": "node node_modules/eslint/bin/eslint.js --fix **/*.js",
     "test": "node node_modules/mocha/bin/_mocha --recursive",
-    "prestart": "npm run lint && npm run test",
-    "start": "node hatul-meow.js"
+    "start": "node index.js"
   },
   "keywords": [],
   "author": "",
