@@ -1,5 +1,6 @@
 const dataTypesMockers = require('../data-types-generator');
-const blackListSchemaTypes = ['object', 'arr', 'array'];
+
+const blackListSchemaTypes = ['object', 'arr', 'array', 'enum'];
 
 const mocker = (schema) => {
   const { type, options = {}, properties = {} } = schema;
@@ -10,6 +11,10 @@ const mocker = (schema) => {
     const generationSchema = Object.keys(properties).reduce((prev, curr) => ({ ...prev, [curr]: mocker(properties[curr]) }), {});
     return dataTypesMockers.object(generationSchema);
     // return Object.keys(properties).reduce((prev, curr) => ({ ...prev, [curr]: mocker(properties[curr]) }), {});
+  }
+  if (type === 'enum') {
+    const { values } = schema;
+    return dataTypesMockers.enum(values);
   }
   if (['array', 'arr'].includes(type)) {
     const {
