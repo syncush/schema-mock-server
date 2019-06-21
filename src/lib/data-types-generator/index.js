@@ -64,4 +64,12 @@ module.exports = {
       },
     };
   },
+  enum: (values) => {
+    return {
+      generate() {
+        const randomEnumValue = values[generateRandomIntegerInRange(0, values.length)];
+        return randomEnumValue;
+      },
+    };
+  },
 };
