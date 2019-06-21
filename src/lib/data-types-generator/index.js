@@ -36,11 +36,31 @@ module.exports = {
     }
     return stringFromRegexGenerator(options);
   },
-  array: (itemScheam, options) => {
+  array: (itemSchema, options) => {
     const { minItems, maxItems } = options;
     return {
       generate() {
-        return [...Array(generateRandomIntegerInRange(minItems, maxItems)).keys()].map(() => itemScheam.generate());
+        return [...Array(generateRandomIntegerInRange(minItems, maxItems)).keys()].map(() => itemSchema.generate());
+      },
+    };
+  },
+  arrayAnyOf: (itemsSchema, options) => {
+    const { minItems, maxItems } = options;
+    return {
+      generate() {
+        return [...Array(generateRandomIntegerInRange(minItems, maxItems)).keys()].map(() => {
+          const randomSchema = itemsSchema[generateRandomIntegerInRange(0, itemsSchema.length)];
+          return randomSchema.generate();
+        });
+      },
+    };
+  },
+  arrayOneOf: (itemsSchema, options) => {
+    const { minItems, maxItems } = options;
+    return {
+      generate() {
+        const chosenSchema = itemsSchema[generateRandomIntegerInRange(0, itemsSchema.length)];
+        return [...Array(generateRandomIntegerInRange(minItems, maxItems)).keys()].map(() => chosenSchema.generate());
       },
     };
   },
