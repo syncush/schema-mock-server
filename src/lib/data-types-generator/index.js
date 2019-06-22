@@ -3,6 +3,8 @@ const RandExp = require('randexp');
 
 const mockerGenericFunction = (type, options) => mockData[type](options);
 
+const tossACoinForIncludingUnrequiredField = () => Math.random() >= 0.5;
+
 const stringFromRegexGenerator = (options) => {
   const { regex } = options;
   return {
@@ -13,13 +15,15 @@ const stringFromRegexGenerator = (options) => {
 };
 
 const generateRandomIntegerInRange = (min, max) => Math.floor(Math.random(min) * (max - min) + min);
-const generateObject = (schemaObectType) => {
+const generateObject = (schemaObectType, requiredFields) => {
   return {
     generate() {
-      return Object.keys(schemaObectType).reduce(
-        (acc, curr) => ({ ...acc, [curr]: schemaObectType[curr].generate() }),
-        {},
-      );
+      return Object.keys(schemaObectType).reduce((acc, curr) => {
+        if (requiredFields.includes(curr) || tossACoinForIncludingUnrequiredField()) {
+          return { ...acc, [curr]: schemaObectType[curr].generate() };
+        }
+        return acc;
+      }, {});
     },
   };
 };
@@ -29,7 +33,7 @@ module.exports = {
   ipv4: (options) => mockerGenericFunction('ipv4', options),
   boolean: (options) => mockerGenericFunction('boolean', options),
   date: (options) => mockerGenericFunction('date', options),
-  object: (schema) => generateObject(schema),
+  object: (schema, required = []) => generateObject(schema, required),
   string: (options) => {
     if (!options.regex) {
       return mockerGenericFunction('string', options);

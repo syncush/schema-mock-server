@@ -8,11 +8,12 @@ const mocker = (schema) => {
     return dataTypesMockers[type](options);
   }
   if (type === 'object') {
+    const { required = Object.keys(properties) } = schema;
     const generationSchema = Object.keys(properties).reduce(
       (prev, curr) => ({ ...prev, [curr]: mocker(properties[curr]) }),
       {},
     );
-    return dataTypesMockers.object(generationSchema);
+    return dataTypesMockers.object(generationSchema, required);
     // return Object.keys(properties).reduce((prev, curr) => ({ ...prev, [curr]: mocker(properties[curr]) }), {});
   }
   if (type === 'enum') {
