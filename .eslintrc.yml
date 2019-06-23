@@ -30,7 +30,7 @@ rules: {
   node/prefer-global/url: ["error", "always"],
   node/prefer-promises/dns: "error",
   node/prefer-promises/fs: "error",
-  filenames/match-regex: [2, "^([a-z|-]+)((\\.unit|\\.integration)?(\\.test)?)$", true],
+  filenames/match-regex: [2, "^([a-z|-|\\d]+)((\\.unit|\\.integration)?(\\.test)?)$", true],
   filenames/match-exported: 2,
   no-only-tests/no-only-tests: "error",
   mocha/no-exclusive-tests: "error",
