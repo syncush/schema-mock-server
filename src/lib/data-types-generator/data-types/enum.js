@@ -2,9 +2,9 @@ const { nullableWrapper, generateRandomIntegerInRange } = require('../../../util
 
 const enumGenerator = (schema) => ({
   generate() {
-    const randomEnumValue = schema[generateRandomIntegerInRange(0, schema.items.length)];
+    const randomEnumValue = schema.items[generateRandomIntegerInRange(0, schema.items.length)];
     return randomEnumValue;
   },
 });
 
-module.exports = (schema) => nullableWrapper(schema.nullable, enumGenerator);
+module.exports = (schema) => nullableWrapper(schema.nullable, enumGenerator(schema));

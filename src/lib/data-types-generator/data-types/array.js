@@ -21,18 +21,32 @@ const selectorsFunc = {
 
 module.exports = (schema) => {
   const {
-    itemSchema,
     schemaSelector = 'oneOf',
     minItems = process.env.ARRAY_MIN_ITEMS || 1,
     maxItems = process.env.ARRAY_MAX_ITEMS || 10,
     nullable = false,
   } = schema;
+
+  let { itemSchema } = schema;
+
+  if (!itemSchema) throw new Error('Bad itemSchema');
+  if (maxItems < minItems) {
+    throw new Error(`Bad minItems or maxItems, values are minItems=${minItems} maxItems=${maxItems}`);
+  }
+
+  if (!Array.isArray(itemSchema) && typeof itemSchema === 'object') {
+    itemSchema = [itemSchema];
+  }
+
   const schemaSelectorFunc = selectorsFunc[schemaSelector];
-  if (schemaSelectorFunc) throw new Error('Unrecognized schema selector');
+  if (Array.isArray(itemSchema) && !schemaSelectorFunc) throw new Error('Unrecognized schema selector');
   return nullableWrapper(nullable, {
     generate() {
       // eslint-disable-next-line max-len
-      return [...Array(generateRandomIntegerInRange(minItems, maxItems)).keys()].map(() => schemaSelectorFunc(itemSchema).generate());
+      return [...Array(generateRandomIntegerInRange(minItems, maxItems)).keys()].map(() => {
+        const value = schemaSelectorFunc(itemSchema)().generate();
+        return value;
+      });
     },
   });
 };
